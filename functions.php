@@ -1,10 +1,10 @@
 <?php
 /**
- * wedodigital Theme functions and definitions
+ * vpTheme functions and definitions
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
- * @package wedodigital
+ * @package vpthemes
  * @since 1.0.0
  */
 
@@ -44,7 +44,7 @@ add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
 function load_custom_wp_admin_style() { 
 	$current_user = wp_get_current_user();
 	$dev_usernames = array( 
-		"wedodigital",
+		"vpthemes",
 	) ;
 
 	wp_register_style( 'custom_wp_admin_css', get_stylesheet_directory_uri() . '/assets/css/admin-style.css');
@@ -87,7 +87,7 @@ function custom_style() {
 add_action( 'admin_init', 'custom_menu_page_removing' );
 function custom_menu_page_removing() {
 	$dev_usernames = array( 
-		"wedodigital",
+		"vpthemes",
 	) ;
 	$current_user = wp_get_current_user();
 
@@ -126,7 +126,7 @@ function cc_mime_types($mimes) {
 add_filter('gettext', 'menu_item_text');
 add_filter('ngettext', 'menu_item_text');
 function menu_item_text( $menu ) {
-	$menu = str_ireplace( 'Elementor', 'WDDD Builder', $menu );
+	$menu = str_ireplace( 'Elementor', 'VPTheme Builder', $menu );
 	return $menu;
 }
 
@@ -151,116 +151,3 @@ function remove_admin_bar() {
 	  show_admin_bar(false);
 	}
 }
-/* One Gift Wonder Event manager
-*/
-//require_once( get_stylesheet_directory(). '/includes/event_manager/ogw_init-functions.php' );
-//wp_register_script( wp_get_upload_dir() . 'custom-css-js/478.js', array( 'jquery' ), $this->version, false );
-//wp_register_script( wp_get_upload_dir() . 'custom-css-js/478.js', array( 'jquery' ), $this->version, false );
-
-// enqueue the script we would like to pass our PHP variables to
-wp_enqueue_script( 'onegiftwonder_script', wp_get_upload_dir() . 'custom-css-js/478.js', array( 'jquery' ), '1.0.0', true );
-
-// pass our PHP variables to the script we enqueued above using wp_localize_script()
-wp_localize_script(
-    'onegiftwonder_script', // the handle of the script we enqueued above
-    'ogw_script_vars', // object name to access our PHP variables from in our script
-    // register an array of variables we would like to use in our script
-    array(
-        'template_directory' => get_template_directory_uri() // template_directory now contains the path to our template directory
-    )
-);
-
-
-add_shortcode( 'get_autofill_cred', 'autofill_cref_field');
-function autofill_cref_field($attr){
-  
-          if($attr['field'] == 'invitation'){
-			  	//$inv = str_replace("'"," ", $_GET['invitation']);
-			  	//$inv = 'invitation';
-			  	//$inv_imgid = get_post_meta( $inv_id->ID , 'wpcf-invitation-design', true ); 
-			  	////$inv = $inv_imgid;// wp_get_attachment_image( $inv_imgid , 'large' );
-			  if ($_GET['invitation-design_id']){
-				$inv_id = $_GET['invitation-design_id'];	  
-			  } else { $inv_id = $_GET['invitation'];}
-			  	$inv = get_post_meta( $inv_id, 'wpcf-invitation-design', true ); 
-			  	
-           } else if($attr['field'] == 'gift'){
-			  	$inv = str_replace("'"," ", $_GET['gift_id']);
-           } else if($attr['field'] == 'charity'){
-			  	$inv = str_replace("'"," ", $_GET['charity']);
-			  	//$inv = 'charity';
-           } else if($attr['field'] == 'test'){
-			  	$inv_id = $_GET['invitation'];
-			  	$inv = get_post_meta( $inv_id, 'wpcf-invitation-design', true ); 
-		  }
-			return $inv;
-}
-function my_save_form_data($form)
-{
-    $_SESSION['invitation_form'] = $form;
-}
-add_action('invitation_form_post_process', 'my_save_form_data');
-
-/* SDsadasdasd sds */
-add_filter( 'wpt_field_options', 'add_some_options', 10, 3);
-    function add_some_options( $options, $title, $type ) {
-        switch( $title ){
-		case 'Select Invitation Design':
-            $options = array();
-            $args = array(
-                'post_type'        => 'invitation-design',
-				'posts_per_page'   => -1,
-                'post_status'      => 'publish',
-				'orderby'   	   => 'title',
-				'order' 		   => 'ASC'
-			);
-            $posts_array = get_posts( $args );
-            foreach ($posts_array as $post) {
-                $options[] = array(
-                    //'#value' => wp_get_attachment_url( get_post_thumbnail_id($post->ID) ),
-                    '#value' => $post->ID,
-                    '#title' => $post->post_title,
-					'#image' => wp_get_attachment_url( get_post_thumbnail_id($post->ID) ),
-                );
-            }
-			break;
-        case 'Select Charity':
-            $options = array();
-            $args = array(
-                'post_type'        => 'charity',
-				'posts_per_page'   => -1,
-                'post_status'      => 'publish',
-				'orderby'   	   => 'title',
-				'order' 		   => 'ASC'
-			);
-            $posts_array = get_posts( $args );
-            foreach ($posts_array as $post) {
-                $options[] = array(
-                    '#value' => $post->ID,
-                    '#title' => $post->post_title,
-					'#image' => wp_get_attachment_url( get_post_thumbnail_id($post->ID) ),
-                );
-            }
-			break;
-		case 'Select Gift':
-            $options = array();
-            $args = array(
-                'post_type'        => 'gift',
-				'posts_per_page'   => -1,
-                'post_status'      => 'publish',
-				'orderby'   	   => 'title',
-				'order' 		   => 'ASC'
-			);
-            $posts_array = get_posts( $args );
-            foreach ($posts_array as $post) {
-                $options[] = array(
-                    '#value' => $post->ID,
-                    '#title' => $post->post_title,
-					'#image' => wp_get_attachment_url( get_post_thumbnail_id($post->ID) ),
-                );
-            }
-            break;
-    }
-    return $options;
-   }
-
