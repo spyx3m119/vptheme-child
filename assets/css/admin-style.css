@@ -1,0 +1,5 @@
+.toolset-notice,
+#astra_settings_meta_box,
+.notice.elementor-message {
+	display: none !important;
+}
